@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title><%= page.title %> - <%= theme.site_title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <% if (page.layout === 'post') { %>
+    <link rel="stylesheet" href="/css/post.css">
+  <% } %>
+</head>
+
+
+<body class="<%= page.layout === 'post' ? 'post-page' : '' %>">
+
+  <%- partial('_partial/header') %>
+
+<main class="container">
+  <h1><%= page.title %></h1>
+  <div class="toc"><%- toc(page.content) %></div>
+  <div class="content"><%- page.content %></div>
+</main>
+
+  <%- partial('_partial/footer') %>
+</body>
+</html>

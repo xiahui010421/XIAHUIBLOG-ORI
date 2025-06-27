@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/css/header.css" />
+
+<!-- <header class="site-header"> -->
+<header class="header">
+  <div class="header-container">
+    <div class="header-left">
+      <img src="/images/淘宝店铺忧忧素材库 (981).gif" alt="Logo" class="header-logo" />
+  <span class="header-title"><%= theme.site_title %></span>
+   </div>
+    <nav class="header-nav">
+      <ul class="header-menu">
+        <% for (var name in theme.menu) { %>
+          <li><a href="<%= url_for(theme.menu[name]) %>"><%= name %></a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</header>
+

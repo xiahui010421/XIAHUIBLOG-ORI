@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>写博客文章 - 编辑器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css"> <!-- 全站通用样式 -->
+  <link rel="stylesheet" href="/css/editor.css"> <!-- 编辑器专属样式 -->
+</head>
+
+<body class="editor-page">
+  <%- include('_partial/header') %>
+
+  <main class="editor-main" style="margin-top: 60px;"> <!-- 避开 header 遮挡 -->
+
+    <form id="postForm">
+      <label>标题
+        <input type="text" name="title" required />
+      </label>
+
+      <label>日期
+        <input type="datetime-local" name="date" required />
+      </label>
+
+      <label>标签（用英文逗号分隔）
+        <input type="text" name="tags" />
+      </label>
+
+      <label>分类
+        <input type="text" name="categories" />
+      </label>
+
+      <label>正文（支持 Markdown）
+        <textarea name="body" rows="15" required></textarea>
+      </label>
+
+      <button type="submit">提交文章</button>
+    </form>
+
+  </main>
+
+  <script src="/js/editor.js"></script>
+</body>
+</html>

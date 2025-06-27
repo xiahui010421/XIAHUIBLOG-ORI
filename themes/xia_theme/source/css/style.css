@@ -1,0 +1,293 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 重置默认边距，撑满视口 */
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: url('../images/淘宝店铺忧忧素材库 (987).gif') no-repeat center center fixed;
+  background-size: cover;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+/* 添加这个类选择器，避免影响所有页面 */
+body.blog-home {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+.daily-sentence {
+  text-align: center;
+  margin: 32px 0 16px 0;
+  font-size: 2.6em;
+  font-weight: bold;
+  margin-top: 60px;
+  /* font-style: italic; */
+  padding: 18px 36px;
+  border-radius: 32px;
+  background: transparent;
+  letter-spacing: 1.5px;
+  /* 渐变色文字 */
+  background-image: linear-gradient(90deg, #ffb347 0%, #ff5e62 50%, #4affb4 100%);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* 彩虹动画 */
+  animation: rainbow-fade 2.5s linear infinite alternate;
+}
+/* 只在 .daily-sentence 下生效 */
+.daily-sentence .sentence-en,
+.daily-sentence .sentence-zh {
+  display: block;
+  background: inherit;
+  background-clip: inherit;
+  -webkit-background-clip: inherit;
+  color: inherit;
+  -webkit-text-fill-color: inherit;
+  font-size: 0.6em;
+  margin-top: 10px;
+  font-weight: normal;
+}
+.daily-sentence .sentence-en {
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+.daily-sentence .sentence-zh {
+  font-size: 0.7em;
+  opacity: 0.8;
+}
+@keyframes rainbow-fade {
+  0% { filter: hue-rotate(0deg);}
+  100% { filter: hue-rotate(360deg);}
+}
+.container {
+  width: min(100%, 1400px);
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 1 auto;
+  /* overflow-y: auto; */
+  padding-top: 30px; /* 如果需要留点空隙 */
+  
+}
+img, table, pre, code, div, section, header, main, footer {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* 让 body 变成 flex 容器，垂直排列 */
+
+
+/* header 固定高度 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  /* 其他样式 */
+  z-index: 1000; /* 确保浮在上层 */
+}
+@media (max-width: 768px) {
+  .index-title {
+    font-size: 40px;
+  }
+
+  .editor-main form#postForm {
+    padding: 20px;
+  }
+
+  .header-title {
+    font-size: 16px;
+  }
+
+  .header-nav .header-menu {
+    gap: 10px;
+  }
+}
+
+/* main 填充剩余空间 */
+ul li a:hover {
+  text-decoration: underline;
+  color: #2980b9;
+}
+.index-title {
+  font-size: 90px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  
+  background: linear-gradient(to right, #cf8dff, #4affb4);
+  /* -webkit-background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+
+  /* 兼容 Firefox（有些版本不支持） */
+  background-clip: text;
+  color: transparent;
+}
+.card {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+:root {
+  --primary-color: #5296d5; 
+}
+
+a {
+  color: var(--primary-color);
+}
+.toc {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  background: #f9f9f9;
+  padding: 1em;
+  border-left: 4px solid #5296d5;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.toc ul, .toc ol {
+  list-style: none;
+  padding-left: 1em;
+  border-left: 3px solid #ddd;
+  margin: 0;
+}
+
+.toc li {
+  margin: 6px 0;
+  position: relative;
+}
+
+.toc li::before {
+  content: "•";
+  color: #5296d5;
+  position: absolute;
+  left: -1em;
+}
+.toc a {
+  color: #444;
+  text-decoration: none;
+}
+
+.toc a:hover {
+  text-decoration: underline;
+}
+
+/* footer 固定高度 */
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #999;
+  z-index: 1000;
+}
+
+
+/* 卡片 */
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.post-card {
+  background: rgba(230, 240, 251, 0.4); /* #e6f0fb 的 40% 不透明度 */
+  border-radius: 12px;
+  padding: 20px;
+  /* 蓝色阴影，透明度低，更有层次感 */
+  box-shadow: 0 6px 12px rgba(18, 52, 75, 0.3);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  color: #1a3e72; /* 深蓝文字 */
+}
+
+.post-card:hover {
+  background-color: #d0e3fc; /* hover 背景稍微深一点 */
+  box-shadow: 0 12px 20px rgba(52, 152, 219, 0.5);
+}
+
+.post-title {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2167b8; /* 标题蓝色 */
+}
+
+.post-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  color: #0d3c91; /* 深蓝悬停色 */
+  text-decoration: underline;
+}
+
+.post-meta {
+  font-size: 0.85rem;
+  color: #2a558c; /* 深蓝灰色 */
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.post-meta time {
+  white-space: nowrap;
+}
+
+.post-categories a,
+.post-tags a {
+  color: #3498db; /* 主题色 */
+  text-decoration: none;
+}
+
+.post-categories a:hover,
+.post-tags a:hover {
+  text-decoration: underline;
+  color: #1a5ea8; /* 悬停深蓝 */
+}
+
+.post-excerpt {
+  color: #2c3e50; /* 稍深文字 */
+  line-height: 1.5;
+  flex-grow: 1;
+}

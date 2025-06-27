@@ -1,0 +1,75 @@
+html, body.editor-page {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+}
+body.editor-page {
+  height: auto !important;
+   min-height: 100vh !important;
+  overflow-y: auto !important;
+  display: block !important;
+}
+
+.editor-main {
+  max-width: 1200px;
+    min-height: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+    margin-bottom: 40px; /* 给底部留空间，避免被footer遮挡 */
+}
+
+.editor-main form#postForm {
+  width: 100%;
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.editor-main form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #444;
+  font-size: 16px;
+}
+
+.editor-main form input[type="text"],
+.editor-main form input[type="datetime-local"],
+.editor-main form textarea {
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.editor-main form input:focus,
+.editor-main form textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 4px rgba(52, 152, 219, 0.4);
+}
+
+.editor-main form button[type="submit"] {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.editor-main form button[type="submit"]:hover {
+  background-color: #2980b9;
+}
