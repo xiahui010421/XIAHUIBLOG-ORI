@@ -1,3 +1,4 @@
+/* editor.css */
 html, body.editor-page {
   height: auto !important;
   min-height: 100vh !important;
@@ -72,4 +73,162 @@ body.editor-page {
 
 .editor-main form button[type="submit"]:hover {
   background-color: #2980b9;
+}
+
+
+
+/* 整体编辑器容器，采用垂直布局 */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 顶部表单区域 */
+.editor-top-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 顶部表单的输入框和文本区域 */
+.editor-top-form input,
+.editor-top-form textarea {
+  flex: 1 1 calc(25% - 16px);
+  min-width: 200px;
+  padding: 12px;
+  border: 1px solid #e1e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+  transition: border-color 0.2s ease;
+}
+
+.editor-top-form input:focus,
+.editor-top-form textarea:focus {
+  outline: none;
+  border-color: #5296d5;
+}
+
+/* 下面的内容编辑和预览区域，水平布局 */
+.editor-bottom {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+/* 内容编辑区和预览区各占一半 */
+.editor-wrapper,
+.preview-wrapper {
+  flex: 1;
+  min-width: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* 内容编辑区的文本区域 */
+.editor-wrapper textarea {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  border: none;
+  font-family: monospace;
+  font-size: 14px;
+  color: #2c3e50;
+  resize: none;
+}
+
+.editor-wrapper textarea:focus {
+  outline: none;
+}
+
+/* 预览区样式 */
+.markdown-preview {
+  padding: 24px;
+  line-height: 1.75;
+  color: #2c3e50;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: #1a3e72;
+}
+
+.markdown-preview p {
+  margin-bottom: 1em;
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5em 0;
+}
+
+.markdown-preview a {
+  color: #5296d5;
+  text-decoration: none;
+}
+
+.markdown-preview a:hover {
+  text-decoration: underline;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid #e1e8f0;
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #7b8a8b;
+  font-style: italic;
+}
+
+.markdown-preview pre {
+  background-color: #f8f9fa;
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.markdown-preview code {
+  background-color: #f8f9fa;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .editor-bottom {
+    flex-direction: column;
+  }
+
+  .editor-top-form input,
+  .editor-top-form textarea {
+    flex: 1 1 100%;
+  }
 }

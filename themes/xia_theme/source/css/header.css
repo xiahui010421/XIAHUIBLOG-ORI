@@ -19,6 +19,7 @@
   display: flex;
   justify-content: space-between; /* 左右两边分开 */
   align-items: center;
+  position: relative;
 }
 
 .header-left {

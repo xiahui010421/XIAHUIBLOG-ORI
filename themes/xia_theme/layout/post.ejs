@@ -14,12 +14,16 @@
 
   <%- partial('_partial/header') %>
 
-<main class="container">
-  <h1><%= page.title %></h1>
-  <div class="toc"><%- toc(page.content) %></div>
-  <div class="content"><%- page.content %></div>
-</main>
+  <main class="container">
+    <aside class="toc">
+      <%- toc(page.content) %>
+    </aside>
+    <section class="content">
+      <%- page.content %>
+    </section>
+  </main>
 
   <%- partial('_partial/footer') %>
 </body>
+<script src="/js/post.js"></script>
 </html>

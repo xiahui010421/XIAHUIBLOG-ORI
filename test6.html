@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="dropdown-toggle">太阳按钮</button>
+  <div id="dropdown-content" style="display:none;">下拉内容</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('dropdown-toggle');
+    const dropdownContent = document.getElementById('dropdown-content');
+
+    toggleBtn.addEventListener('click', () => {
+      if (dropdownContent.style.display === 'none') {
+        dropdownContent.style.display = 'block';
+      } else {
+        dropdownContent.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

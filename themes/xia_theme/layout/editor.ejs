@@ -6,39 +6,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css"> <!-- 全站通用样式 -->
   <link rel="stylesheet" href="/css/editor.css"> <!-- 编辑器专属样式 -->
+  <!-- 引入 Marked.js 库 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@4.2.12/marked.min.js"></script>
 </head>
 
 <body class="editor-page">
   <%- include('_partial/header') %>
 
   <main class="editor-main" style="margin-top: 60px;"> <!-- 避开 header 遮挡 -->
+    <div class="editor-container">
+      <!-- 编辑器区域 -->
+      <div class="editor-wrapper">
+        <h2>编辑器</h2>
+        <form id="postForm">
+          <label>标题
+            <input type="text" name="title" required />
+          </label>
 
-    <form id="postForm">
-      <label>标题
-        <input type="text" name="title" required />
-      </label>
+          <label>日期
+            <input type="datetime-local" name="date" required />
+          </label>
 
-      <label>日期
-        <input type="datetime-local" name="date" required />
-      </label>
+          <label>标签（用英文逗号分隔）
+            <input type="text" name="tags" />
+          </label>
 
-      <label>标签（用英文逗号分隔）
-        <input type="text" name="tags" />
-      </label>
+          <label>分类
+            <input type="text" name="categories" />
+          </label>
 
-      <label>分类
-        <input type="text" name="categories" />
-      </label>
+          <label>正文（支持 Markdown）
+            <textarea id="markdownEditor" name="body" rows="15" required></textarea>
+          </label>
 
-      <label>正文（支持 Markdown）
-        <textarea name="body" rows="15" required></textarea>
-      </label>
+          <button type="submit">提交文章</button>
+        </form>
+      </div>
 
-      <button type="submit">提交文章</button>
-    </form>
-
+      <!-- 预览区域 -->
+      <div class="preview-wrapper">
+        <h2>预览</h2>
+        <div id="previewContent" class="markdown-preview"></div>
+      </div>
+    </div>
   </main>
 
   <script src="/js/editor.js"></script>
+  <script>
+    // 实时预览功能
+    document.addEventListener('DOMContentLoaded', function() {
+      const editor = document.getElementById('markdownEditor');
+      const preview = document.getElementById('previewContent');
+      
+      // 初始化预览
+      updatePreview();
+      
+      // 监听编辑器内容变化
+      editor.addEventListener('input', updatePreview);
+      
+      // 转换 Markdown 为 HTML 并更新预览
+      function updatePreview() {
+        const markdown = editor.value;
+        // 使用 marked.js 将 Markdown 转换为 HTML
+        const html = marked.parse(markdown);
+        preview.innerHTML = html;
+      }
+    });
+  </script>
 </body>
 </html>

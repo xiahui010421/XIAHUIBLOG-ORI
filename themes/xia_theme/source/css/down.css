@@ -1,0 +1,136 @@
+/* header 中间按钮居中 */
+.header-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1100;
+}
+
+.dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: transform 0.3s ease;
+  }
+  .dropdown-btn.active {
+    transform: scale(1.2);
+  }
+  .sun-rays {
+  transform-origin: center;
+  transform-box: fill-box;
+  transform: scale(0);
+  opacity: 0;
+  /* 不要 transition，使用动画控制 */
+  /* transition: transform 0.4s ease, opacity 0.4s ease; */
+}
+
+/* 展开动画 */
+@keyframes rays-expand {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 收起动画 */
+@keyframes rays-collapse {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+  .dropdown-btn.active .sun-rays {
+    animation: rays-expand 0.4s forwards ease-out;
+  }
+  /* .dropdown-content {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+  } */
+
+
+
+/* 下拉内容初始隐藏 */
+#dropdown-content {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 980px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  border-radius: 0 0 8px 8px;
+
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+  z-index: 1050;
+}
+
+#dropdown-content.active {
+  opacity: 1;
+  pointer-events: auto;
+  /* 不设置 max-height，交给 JS 动态赋值 */
+}
+
+
+
+.dropdown-inner {
+  padding: 30px 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.calendar-table th, .calendar-table td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  width: 14.28%;
+  height: 30px;
+}
+.calendar-table td.highlight {
+  background-color: #FFEB3B;
+  font-weight: bold;
+  border-radius: 4px;
+}
+.calendar-btn {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  padding: 2px 8px;
+  margin: 0 2px;
+  cursor: pointer;
+  color: #ffb347;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.calendar-btn:hover {
+  background: #fffbe6;
+}
+.calendar-title {
+  min-width: 80px;
+  display: inline-block;
+  text-align: center;
+}

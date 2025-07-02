@@ -6,72 +6,74 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="blog-home">
-   <div class="container">
+   <div class="container" id="main-container">
     <!-- 所有主要内容放这里，例如 header、main、footer -->
     <%- partial('_partial/header') %>
 
-      <main>
-  <div id="daily-sentence" class="daily-sentence"></div>
+    <main>
+      <div id="daily-sentence" class="daily-sentence"></div>
 
-  <div class="post-list">
-    <% page.posts.forEach(function(post) { %>
-      <article class="card post-card">
-        <h2 class="post-title">
-          <a href="<%= url_for(post.path) %>"><%= post.title %></a>
-        </h2>
+      <div class="post-list">
+        <% page.posts.forEach(function(post) { %>
+          <article class="card post-card">
+            <h2 class="post-title">
+              <a href="<%= url_for(post.path) %>"><%= post.title %></a>
+            </h2>
 
-        <div class="post-meta">
-          <time datetime="<%= post.date.toISOString() %>"><%= date(post.date, 'YYYY-MM-DD') %></time>
+            <div class="post-meta">
+              <time datetime="<%= post.date.toISOString() %>"><%= date(post.date, 'YYYY-MM-DD') %></time>
 
-          <% if(post.categories && post.categories.length) { %>
-            <span class="post-categories">
-              分类: 
-              <% post.categories.forEach(function(cat, idx) { %>
-                <a href="<%= url_for(cat.path) %>"><%= cat.name %></a><%= idx < post.categories.length - 1 ? ', ' : '' %>
-              <% }); %>
-            </span>
-          <% } %>
+              <% if(post.categories && post.categories.length) { %>
+                <span class="post-categories">
+                  分类: 
+                  <% post.categories.forEach(function(cat, idx) { %>
+                    <a href="<%= url_for(cat.path) %>"><%= cat.name %></a><%= idx < post.categories.length - 1 ? ', ' : '' %>
+                  <% }); %>
+                </span>
+              <% } %>
 
-          <% if(post.tags && post.tags.length) { %>
-            <span class="post-tags">
-              标签: 
-              <% post.tags.forEach(function(tag, idx) { %>
-                <a href="<%= url_for(tag.path) %>"><%= tag.name %></a><%= idx < post.tags.length - 1 ? ', ' : '' %>
-              <% }); %>
-            </span>
-          <% } %>
-        </div>
+              <% if(post.tags && post.tags.length) { %>
+                <span class="post-tags">
+                  标签: 
+                  <% post.tags.forEach(function(tag, idx) { %>
+                    <a href="<%= url_for(tag.path) %>"><%= tag.name %></a><%= idx < post.tags.length - 1 ? ', ' : '' %>
+                  <% }); %>
+                </span>
+              <% } %>
+            </div>
 
-        <% if(post.excerpt) { %>
-          <p class="post-excerpt"><%= post.excerpt %></p>
-        <% } %>
-      </article>
-    <% }); %>
-  </div>
-</main>
-
-
-      <%- partial('_partial/footer') %>
+            <% if(post.excerpt) { %>
+              <p class="post-excerpt"><%= post.excerpt %></p>
+            <% } %>
+          </article>
+        <% }); %>
+      </div>
+    </main>
    </div>
-    <script src="/js/main.js"></script>
-   <script>
-function getRandomColor() {
-  return '#' + Math.floor(Math.random()*0xffffff).toString(16).padStart(6, '0');
-}
-function setRandomGradientText(el) {
-  const color1 = getRandomColor();
-  const color2 = getRandomColor();
-  const color3 = getRandomColor();
-  el.style.backgroundImage = `linear-gradient(90deg, ${color1}, ${color2}, ${color3})`;
-}
-fetch('https://v1.hitokoto.cn/?encode=text')
-  .then(res => res.text())
-  .then(txt => {
-    const el = document.getElementById('daily-sentence');
-    el.textContent = txt;
-    setRandomGradientText(el);
-  });
+   <%- partial('_partial/footer') %>
+
+<script src="/js/main.js"></script>
+<script>
+  function getRandomColor() {
+    return '#' + Math.floor(Math.random()*0xffffff).toString(16).padStart(6, '0');
+  }
+  function setRandomGradientText(el) {
+    const color1 = getRandomColor();
+    const color2 = getRandomColor();
+    const color3 = getRandomColor();
+    el.style.backgroundImage = `linear-gradient(90deg, ${color1}, ${color2}, ${color3})`;
+  }
+  fetch('https://v1.hitokoto.cn/?encode=text')
+    .then(res => res.text())
+    .then(txt => {
+      const el = document.getElementById('daily-sentence');
+      el.textContent = txt;
+      setRandomGradientText(el);
+    });
+
+    //
+    
 </script>
-</script>
+
 </body>
 </html>
