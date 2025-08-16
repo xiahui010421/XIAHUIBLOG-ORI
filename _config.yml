@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 书山有路勤为径
+title: xiahuibb's blog
 subtitle: ''
 description: ''
 keywords:
-author: xiahui
+author: xiahui010421
 language: zh-CN
 timezone: ''
 
@@ -101,7 +101,9 @@ theme: xia_theme
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:xiahui010421/xiahui010421.github.io.git
+  branch: main   # 如果仓库的默认分支是 main，就写 main；如果是 master，就写 master
 
 toc:
   list_number: false

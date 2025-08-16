@@ -84,7 +84,7 @@ main.container {
   line-height: 1.8;
   overflow-wrap: break-word;
   word-break: break-word;
-  margin-top: 40px;
+  margin-top: 30px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -93,7 +93,6 @@ main.container {
   transform: translateY(-5px);
 }
 
-/* ===================== 标题样式 ===================== */
 /* ===================== 标题样式 ===================== */
 .content h1 {
   font-size: 2rem;

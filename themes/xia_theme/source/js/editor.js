@@ -35,3 +35,23 @@ document.getElementById('postForm').onsubmit = async function(e) {
     alert('提交失败：' + err.message);
   }
 };
+
+    // 实时预览功能
+    document.addEventListener('DOMContentLoaded', function() {
+      const editor = document.getElementById('markdownEditor');
+      const preview = document.getElementById('previewContent');
+      
+      // 初始化预览
+      updatePreview();
+      
+      // 监听编辑器内容变化
+      editor.addEventListener('input', updatePreview);
+      
+      // 转换 Markdown 为 HTML 并更新预览
+      function updatePreview() {
+        const markdown = editor.value;
+        // 使用 marked.js 将 Markdown 转换为 HTML
+        const html = marked.parse(markdown);
+        preview.innerHTML = html;
+      }
+    });
