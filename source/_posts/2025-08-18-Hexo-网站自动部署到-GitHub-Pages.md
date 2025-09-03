@@ -83,10 +83,11 @@ echo "部署完成! 访问 https://xiahui010421.github.io/ 查看网站"
    ```
 
 ---
+```
 deploy:
   type: git
   repo: git@github.com:xiahui010421/xiahui010421.github.io.git  # 部署目标仓库
   branch: main  # 部署到的分支（通常是main或master）
   message: "自动部署: {{ now('YYYY-MM-DD HH:mm:ss') }}"  # 提交信息，支持时间变量
 
-!
+```
