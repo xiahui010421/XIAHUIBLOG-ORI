@@ -82,26 +82,11 @@ echo "部署完成! 访问 https://xiahui010421.github.io/ 查看网站"
    ./deploy.sh
    ```
 
-3. 打开浏览器访问：
-
-   ```
-   https://xiahui010421.github.io/
-   ```
-
-   即可看到最新内容。
-
 ---
+deploy:
+  type: git
+  repo: git@github.com:xiahui010421/xiahui010421.github.io.git  # 部署目标仓库
+  branch: main  # 部署到的分支（通常是main或master）
+  message: "自动部署: {{ now('YYYY-MM-DD HH:mm:ss') }}"  # 提交信息，支持时间变量
 
-## 5. 注意事项
-
-* 使用 `--force` 会覆盖远程仓库内容，如果远程有重要历史提交，请谨慎。
-* 如果远程仓库比本地更新，第一次部署可先 `git pull` 再部署。
-* 该脚本适合 **Hexo、VuePress 或普通静态网站**。
-* 以后只需修改文章或主题，然后运行 `./deploy.sh` 即可自动部署。
-
----
-
-
-# 部署流程图
-
-![部署流程图](/images/deploy-flow.png)
+!

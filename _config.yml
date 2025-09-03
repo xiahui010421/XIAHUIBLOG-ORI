@@ -102,8 +102,9 @@ theme: xia_theme
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: git@github.com:xiahui010421/xiahui010421.github.io.git
-  branch: main   # 如果仓库的默认分支是 main，就写 main；如果是 master，就写 master
+  repo: git@github.com:xiahui010421/xiahui010421.github.io.git  # 部署目标仓库
+  branch: main  # 部署到的分支（通常是main或master）
+  message: "自动部署: {{ now('YYYY-MM-DD HH:mm:ss') }}"  # 提交信息，支持时间变量
 
 toc:
   list_number: false
