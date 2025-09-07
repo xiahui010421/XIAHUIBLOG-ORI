@@ -29,19 +29,50 @@
           </div>
         </div>
       </aside>
-
       <section class="archive-content">
         <div class="current-filter" id="current-filter"></div>
         <div id="archive-list" class="archive-list">
           <% site.posts.sort('-date').forEach(function(post) { %>
+            <% 
+            // 尝试多种方式获取图片路径
+            var imageUrl = '';
+            if (post.thumbnail) {
+              imageUrl = post.thumbnail;
+            } else if (post.cover) {
+              imageUrl = post.cover;
+            } else if (post.image) {
+              imageUrl = post.image;
+            } else if (post.banner) {
+              imageUrl = post.banner;
+            }
+            
+            // 检查文章内容中是否有图片
+            if (!imageUrl && post.content) {
+              var imgMatch = post.content.match(/!\[.*?\]\((.*?)\)/);
+              if (imgMatch && imgMatch[1]) {
+                imageUrl = imgMatch[1];
+              } else {
+                imgMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if (imgMatch && imgMatch[1]) {
+                  imageUrl = imgMatch[1];
+                }
+              }
+            }
+            %>
             <article class="card post-card"
               data-category="<%= (post.categories && post.categories.length) ? post.categories.map(c => c.name).join(',') : '' %>"
               data-tag="<%= (post.tags && post.tags.length) ? post.tags.map(t => t.name).join(',') : '' %>">
               <div class="post-thumbnail">
-                <% if(post.thumbnail) { %>
-                  <img src="<%= post.thumbnail %>" alt="<%= post.title %>" />
+                <% if(imageUrl && imageUrl.trim() !== '') { %>
+                  <!-- 有图片，设置原始路径 -->
+                  <img src="<%= imageUrl %>" alt="<%= post.title %>" 
+                       data-has-thumbnail="true" 
+                       data-original-src="<%= imageUrl %>" />
                 <% } else { %>
-                  <img src="" alt="<%= post.title %>" class="random-image" />
+                  <!-- 没有图片，使用随机图片 -->
+                  <img src="" alt="<%= post.title %>" 
+                       class="random-image" 
+                       data-has-thumbnail="false" />
                 <% } %>
               </div>
               <div class="post-info">
@@ -76,7 +107,6 @@
     </main>
   </div>
   <%- partial('_partial/footer') %>
-
   <script src="/js/archive.js"></script>
 </body>
 </html>
