@@ -2,8 +2,8 @@
 ---
 title: Hexo 网站自动部署到 GitHub Pages
 date: 2025-08-18T09:22:00.000Z
-tags: [blog]
-categories: blog
+tags: [Hexo, GitHub Pages, 自动部署, CI/CD, Git, Shell脚本, 静态网站]
+categories: [技术教程, 部署发布]
 ---
 
 # Hexo 网站自动部署到 GitHub Pages

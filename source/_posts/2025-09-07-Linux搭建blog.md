@@ -1,8 +1,8 @@
 ---
 title: Linux搭建blog
 date: 2025-09-07T09:42:00.000Z
-tags: [blog]
-categories: blog
+tags: [Linux, SSH, SCP, 博客搭建, 部署, 后端开发]
+categories: [技术教程, 服务器部署]
 ---
 
 ## 进入liunx

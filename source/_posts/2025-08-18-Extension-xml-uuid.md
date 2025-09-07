@@ -1,8 +1,8 @@
 ---
 title: Extension-xml-uuid
 date: 2025-08-18T13:35:00.000Z
-tags: [blog]
-categories: blog
+tags: [VS Code插件, TypeScript, XML, UUID, 插件开发, CSV解析, 开发工具]
+categories: [开发工具, 技术教程]
 ---
 
 # XML UUID Hover 插件操作指南（清晰版）
