@@ -26,7 +26,7 @@
 
     /* 左侧二级菜单 */
     .archive-sidebar {
-      width: 220px; /* 增大侧边栏宽度 */
+      width: 220px;
       flex-shrink: 0;
       background: #f7fafd;
       border-radius: 8px;
@@ -35,6 +35,8 @@
       position: sticky;
       top: 80px;
       height: fit-content;
+      max-height: calc(100vh - 100px);
+      overflow: hidden;
     }
 
     .archive-category-group,
@@ -51,6 +53,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
     .archive-group-title:hover {
@@ -70,19 +76,44 @@
     .archive-submenu {
       display: none;
       padding: 8px 0;
+      max-height: 280px;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .archive-group.open .archive-submenu {
       display: block;
     }
 
+    /* 自定义滚动条 */
+    .archive-submenu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .archive-submenu::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 2px;
+    }
+
+    .archive-submenu::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 2px;
+    }
+
+    .archive-submenu::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
     .archive-submenu-item {
-      padding: 10px 24px 10px 36px;
-      font-size: 0.95em;
+      padding: 8px 24px 8px 36px;
+      font-size: 0.9em;
       color: #5296d5;
       cursor: pointer;
       display: flex;
       align-items: center;
+      line-height: 1.3;
+      word-break: break-all;
+      transition: all 0.2s;
     }
 
     .archive-submenu-item:hover,
@@ -92,10 +123,43 @@
       font-weight: 500;
     }
 
+    .archive-submenu-item span:first-child {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+
     .archive-submenu-count {
-      margin-left: auto;
-      font-size: 0.85em;
+      font-size: 0.8em;
       color: #999;
+      background: #f0f4f8;
+      padding: 2px 6px;
+      border-radius: 10px;
+      min-width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* 添加 "显示全部" 选项 */
+    .show-all-item {
+      padding: 12px 24px;
+      font-size: 0.95em;
+      color: #2d3748;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #e1e8f0;
+      font-weight: 500;
+    }
+
+    .show-all-item:hover,
+    .show-all-item.active {
+      background: #e7f2fa;
+      color: #2167b8;
     }
 
     /* 右侧文章列表 */
@@ -181,6 +245,18 @@
       font-size: 0.95em;
     }
 
+    /* 当前筛选状态提示 */
+    .current-filter {
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 0.9em;
+      color: #1976d2;
+      display: none;
+    }
+
     /* 响应式设计 */
     @media (min-width: 1200px) {
       .archive-sidebar {
@@ -207,6 +283,10 @@
       .archive-sidebar {
         width: 100%;
         position: static;
+        max-height: none;
+      }
+      .archive-submenu {
+        max-height: 200px;
       }
       .archive-group-title {
         padding: 12px 16px;
@@ -229,6 +309,10 @@
   <div class="archive-page">
     <main class="archive-main">
       <aside class="archive-sidebar">
+        <div class="show-all-item active" id="show-all">
+          显示全部文章
+        </div>
+        
         <div class="archive-category-group archive-group open">
           <h3 class="archive-group-title">分类</h3>
           <div class="archive-submenu" id="category-submenu">
@@ -245,6 +329,7 @@
       </aside>
 
       <section class="archive-content">
+        <div class="current-filter" id="current-filter"></div>
         <div id="archive-list" class="archive-list">
           <% site.posts.sort('-date').forEach(function(post) { %>
             <article class="card post-card"
@@ -254,7 +339,7 @@
                 <% if(post.thumbnail) { %>
                   <img src="<%= post.thumbnail %>" alt="<%= post.title %>" />
                 <% } else { %>
-                  <div style="width: 100%; height: 100%; background: #f0f4f8;"></div>
+                  <img src="/images/淘宝店铺忧忧素材库 (982).gif" alt="<%= post.title %>" />
                 <% } %>
               </div>
               <div class="post-info">
@@ -293,6 +378,31 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const posts = Array.from(document.querySelectorAll('.post-card'));
+      const currentFilter = document.getElementById('current-filter');
+      const showAllItem = document.getElementById('show-all');
+      
+      // 随机图片数组 - 请根据你的实际图片文件名修改
+      const randomImages = [
+        '/images/淘宝店铺忧忧素材库 (980).gif',
+        '/images/淘宝店铺忧忧素材库 (981).gif',
+        '/images/淘宝店铺忧忧素材库 (982).gif',
+        '/images/淘宝店铺忧忧素材库 (983).gif',
+        '/images/淘宝店铺忧忧素材库 (984).gif',
+        '/images/淘宝店铺忧忧素材库 (985).gif',
+        '/images/淘宝店铺忧忧素材库 (986).gif',
+        '/images/淘宝店铺忧忧素材库 (987).gif',
+      ];
+      
+      // 为没有缩略图的文章随机分配图片
+      document.querySelectorAll('.random-image').forEach(img => {
+        const randomIndex = Math.floor(Math.random() * randomImages.length);
+        img.src = randomImages[randomIndex];
+        
+        // 图片加载失败时使用第一张作为兜底
+        img.onerror = function() {
+          this.src = randomImages[0];
+        };
+      });
       
       // 提取分类和标签并统计数量
       const categoryCount = new Map();
@@ -301,12 +411,16 @@
       posts.forEach(post => {
         if (post.dataset.category) {
           post.dataset.category.split(',').forEach(cat => {
-            categoryCount.set(cat, (categoryCount.get(cat) || 0) + 1);
+            if (cat.trim()) {
+              categoryCount.set(cat.trim(), (categoryCount.get(cat.trim()) || 0) + 1);
+            }
           });
         }
         if (post.dataset.tag) {
           post.dataset.tag.split(',').forEach(tag => {
-            tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+            if (tag.trim()) {
+              tagCount.set(tag.trim(), (tagCount.get(tag.trim()) || 0) + 1);
+            }
           });
         }
       });
@@ -317,21 +431,27 @@
         if (!menu) return;
         
         menu.innerHTML = '';
-        items.forEach(item => {
+        // 按名称排序
+        const sortedItems = Array.from(items).sort();
+        
+        sortedItems.forEach(item => {
           const count = type === 'category' ? categoryCount.get(item) : tagCount.get(item);
           const itemEl = document.createElement('div');
           itemEl.className = 'archive-submenu-item';
           itemEl.innerHTML = `
-            <span>${item}</span>
+            <span title="${item}">${item}</span>
             <span class="archive-submenu-count">${count || 0}</span>
           `;
           itemEl.dataset.value = item;
+          itemEl.dataset.type = type;
           itemEl.onclick = function() {
-            document.querySelectorAll('.archive-submenu-item').forEach(el => {
+            // 清除所有活跃状态
+            document.querySelectorAll('.archive-submenu-item, .show-all-item').forEach(el => {
               el.classList.remove('active');
             });
             this.classList.add('active');
             filterPosts(type, item);
+            showCurrentFilter(type, item);
           };
           menu.appendChild(itemEl);
         });
@@ -339,6 +459,16 @@
       
       fillMenu('category-submenu', Array.from(categoryCount.keys()).filter(Boolean), 'category');
       fillMenu('tag-submenu', Array.from(tagCount.keys()).filter(Boolean), 'tag');
+
+      // 显示全部文章功能
+      showAllItem.onclick = function() {
+        document.querySelectorAll('.archive-submenu-item').forEach(el => {
+          el.classList.remove('active');
+        });
+        this.classList.add('active');
+        showAllPosts();
+        hideCurrentFilter();
+      };
 
       // 二级菜单折叠/展开功能
       document.querySelectorAll('.archive-group-title').forEach(title => {
@@ -350,19 +480,84 @@
 
       // 筛选功能
       function filterPosts(type, value) {
+        let visibleCount = 0;
         posts.forEach(post => {
           let shouldShow = false;
           if (type === 'category') {
-            shouldShow = post.dataset.category.split(',').includes(value);
+            shouldShow = post.dataset.category.split(',').map(c => c.trim()).includes(value);
           } else if (type === 'tag') {
-            shouldShow = post.dataset.tag.split(',').includes(value);
+            shouldShow = post.dataset.tag.split(',').map(t => t.trim()).includes(value);
           }
           post.style.display = shouldShow ? 'flex' : 'none';
           if (window.innerWidth <= 900 && shouldShow) {
             post.style.display = 'block';
           }
+          if (shouldShow) visibleCount++;
+        });
+        
+        // 如果没有匹配的文章，显示空状态
+        if (visibleCount === 0) {
+          showEmptyState();
+        } else {
+          hideEmptyState();
+        }
+      }
+
+      // 显示全部文章
+      function showAllPosts() {
+        posts.forEach(post => {
+          post.style.display = 'flex';
+          if (window.innerWidth <= 900) {
+            post.style.display = 'block';
+          }
+        });
+        hideEmptyState();
+      }
+
+      // 显示当前筛选状态
+      function showCurrentFilter(type, value) {
+        const typeText = type === 'category' ? '分类' : '标签';
+        currentFilter.textContent = `当前筛选：${typeText} - ${value}`;
+        currentFilter.style.display = 'block';
+      }
+
+      // 隐藏筛选状态提示
+      function hideCurrentFilter() {
+        currentFilter.style.display = 'none';
+      }
+
+      // 显示空状态
+      function showEmptyState() {
+        const archiveList = document.getElementById('archive-list');
+        let emptyEl = document.querySelector('.archive-empty');
+        if (!emptyEl) {
+          emptyEl = document.createElement('div');
+          emptyEl.className = 'archive-empty';
+          emptyEl.textContent = '没有找到匹配的文章';
+          archiveList.appendChild(emptyEl);
+        }
+        emptyEl.style.display = 'block';
+      }
+
+      // 隐藏空状态
+      function hideEmptyState() {
+        const emptyEl = document.querySelector('.archive-empty');
+        if (emptyEl) {
+          emptyEl.style.display = 'none';
+        }
+      }
+
+      // 响应式处理
+      function handleResize() {
+        const isMobile = window.innerWidth <= 900;
+        posts.forEach(post => {
+          if (post.style.display !== 'none') {
+            post.style.display = isMobile ? 'block' : 'flex';
+          }
         });
       }
+
+      window.addEventListener('resize', handleResize);
     });
   </script>
 </body>
