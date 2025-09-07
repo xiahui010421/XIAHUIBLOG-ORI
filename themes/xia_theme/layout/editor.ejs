@@ -4,54 +4,95 @@
   <meta charset="UTF-8" />
   <title>写博客文章 - 编辑器</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/style.css"> <!-- 全站通用样式 -->
-  <link rel="stylesheet" href="/css/editor.css"> <!-- 编辑器专属样式 -->
-  <!-- 引入 Marked.js 库 -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/editor.css">
   <script src="https://cdn.jsdelivr.net/npm/marked@4.2.12/marked.min.js"></script>
 </head>
-
 <body class="editor-page">
   <%- include('_partial/header') %>
+  
+  <main class="editor-main">
+    <form id="postForm" class="editor-container">
+      <!-- 文章信息区域 -->
+      <section class="editor-meta">
+        <h2>文章信息</h2>
+        <div class="meta-form">
+          <div class="meta-row">
+            <label>
+              文章标题
+              <input type="text" name="title" placeholder="请输入文章标题" required />
+            </label>
+            <label>
+              发布日期
+              <input type="date" name="date" required />
+            </label>
+          </div>
+          <div class="meta-row">
+            <label>
+              标签
+              <input type="text" name="tags" placeholder="用英文逗号分隔，如：JavaScript, Vue, 前端" />
+            </label>
+            <label>
+              分类
+              <input type="text" name="categories" placeholder="如：技术笔记" />
+            </label>
+          </div>
+        </div>
+      </section>
 
-  <main class="editor-main" style="margin-top: 60px;"> <!-- 避开 header 遮挡 -->
-    <div class="editor-container">
-      <!-- 编辑器区域 -->
-      <div class="editor-wrapper">
-        <h2>编辑器</h2>
-        <form id="postForm">
-          <label>标题
-            <input type="text" name="title" required />
-          </label>
+      <!-- 编辑和预览区域 -->
+      <section class="editor-content">
+        <div class="editor-panel">
+          <div class="panel-header">
+            Markdown 编辑器
+          </div>
+          <textarea 
+            id="markdownEditor" 
+            name="body" 
+            class="editor-textarea"
+            placeholder="在这里使用 Markdown 语法编写你的文章内容...
 
-          <label>日期
-            <input type="datetime-local" name="date" required />
-          </label>
+# 标题示例
+## 二级标题
 
-          <label>标签（用英文逗号分隔）
-            <input type="text" name="tags" />
-          </label>
+**粗体文本** 和 *斜体文本*
 
-          <label>分类
-            <input type="text" name="categories" />
-          </label>
+- 列表项 1
+- 列表项 2
 
-          <label>正文（支持 Markdown）
-            <textarea id="markdownEditor" name="body" rows="15" required></textarea>
-          </label>
+```javascript
+// 代码示例
+console.log('Hello World');
+```
 
-          <button type="submit">提交文章</button>
-        </form>
-      </div>
+> 这是一个引用块
 
-      <!-- 预览区域 -->
-      <div class="preview-wrapper">
-        <h2>预览</h2>
-        <div id="previewContent" class="markdown-preview"></div>
-      </div>
-    </div>
+[链接文字](https://example.com)"
+            required>
+          </textarea>
+        </div>
+        
+        <div class="preview-panel">
+          <div class="panel-header">
+            预览
+          </div>
+          <div id="previewContent" class="preview-content">
+            <div class="preview-empty">
+              开始编写内容，这里将显示实时预览...
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 提交区域 -->
+      <section class="submit-area">
+        <button type="submit" class="submit-btn">
+          📤 发布文章
+        </button>
+      </section>
+    </form>
   </main>
 
-  
   <script src="/js/editor.js"></script>
 </body>
 </html>
