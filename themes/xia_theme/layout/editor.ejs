@@ -11,6 +11,14 @@
 <body class="editor-page">
   <%- include('_partial/header') %>
   
+  <!-- 编辑模式提示 -->
+  <div id="editModeNotice" class="edit-mode-notice" style="display: none;">
+    <div class="notice-content">
+      <span class="notice-icon">✏️</span>
+      <span class="notice-text">编辑模式：正在编辑已有文章</span>
+    </div>
+  </div>
+  
   <main class="editor-main">
     <form id="postForm" class="editor-container">
       <!-- 文章信息区域 -->
@@ -39,7 +47,6 @@
           </div>
         </div>
       </section>
-
       <!-- 编辑和预览区域 -->
       <section class="editor-content">
         <div class="editor-panel">
@@ -52,21 +59,15 @@
             class="editor-textarea"
             placeholder="
 在这里使用 Markdown 语法编写你的文章内容...
-
 # 标题示例
 ## 二级标题
-
 **粗体文本** 和 *斜体文本*
-
 - 列表项 1
 - 列表项 2
-
 ```javascript
 console.log('Hello World');
 ```
-
 > 这是一个引用块
-
 [链接文字](https://example.com)"
             required>
           </textarea>
@@ -83,7 +84,6 @@ console.log('Hello World');
           </div>
         </div>
       </section>
-
       <!-- 提交区域 -->
       <section class="submit-area">
         <button type="submit" class="submit-btn">
@@ -92,7 +92,81 @@ console.log('Hello World');
       </section>
     </form>
   </main>
-
+  
+  <style>
+    /* 编辑模式提示样式 */
+    .edit-mode-notice {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      z-index: 1000;
+      font-weight: 500;
+      animation: slideDown 0.3s ease-out;
+    }
+    
+    .notice-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .notice-icon {
+      font-size: 16px;
+    }
+    
+    .notice-text {
+      font-size: 14px;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .edit-mode-notice {
+        left: 20px;
+        right: 20px;
+        transform: none;
+        border-radius: 15px;
+      }
+    }
+  </style>
+  
+  <script>
+    // 检查并显示编辑模式提示
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isEditMode = urlParams.get('mode') === 'edit';
+      
+      if (isEditMode) {
+        const notice = document.getElementById('editModeNotice');
+        notice.style.display = 'block';
+        
+        // 5秒后自动隐藏提示
+        setTimeout(() => {
+          notice.style.opacity = '0';
+          notice.style.transform = 'translateX(-50%) translateY(-20px)';
+          setTimeout(() => {
+            notice.style.display = 'none';
+          }, 300);
+        }, 5000);
+      }
+    });
+  </script>
+  
   <script src="/js/editor.js"></script>
 </body>
 </html>

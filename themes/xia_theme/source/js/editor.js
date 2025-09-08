@@ -1,13 +1,39 @@
-// editor.js - 修复预览显示版本
+// editor.js - 调试版本，支持编辑模式
 
 document.addEventListener('DOMContentLoaded', function() {
-  // 设置默认日期
-  const dateInput = document.querySelector('input[name="date"]');
-  const today = new Date();
-  const formattedDate = today.getFullYear() + '-' + 
-    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-    String(today.getDate()).padStart(2, '0');
-  dateInput.value = formattedDate;
+  console.log('编辑器页面加载完成');
+  
+  // 检查是否是编辑模式
+  const urlParams = new URLSearchParams(window.location.search);
+  const isEditMode = urlParams.get('mode') === 'edit';
+  const slug = urlParams.get('slug');
+  
+  console.log('页面参数:', { isEditMode, slug });
+  
+  // 设置页面标题
+  if (isEditMode) {
+    document.title = '编辑文章 - 博客编辑器';
+    
+    // 修改提交按钮文字
+    const submitBtn = document.querySelector('.submit-btn');
+    if (submitBtn) {
+      submitBtn.innerHTML = '💾 更新文章';
+    }
+    
+    // 修改页面标题显示
+    const metaTitle = document.querySelector('.editor-meta h2');
+    if (metaTitle) {
+      metaTitle.textContent = '编辑文章信息';
+    }
+  }
+
+  // 如果是编辑模式，从localStorage加载数据
+  if (isEditMode) {
+    loadPostDataForEdit();
+  } else {
+    // 新建模式：设置默认日期
+    setDefaultDate();
+  }
 
   // 实时预览功能
   const editor = document.getElementById('markdownEditor');
@@ -23,6 +49,115 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 图片上传和粘贴功能
   setupImageHandling();
+  
+  // 加载编辑数据（调试版本）
+  function loadPostDataForEdit() {
+    console.log('开始加载编辑数据');
+    
+    try {
+      const postDataStr = localStorage.getItem('editPostData');
+      console.log('从localStorage获取的原始数据:', postDataStr);
+      
+      if (!postDataStr) {
+        console.error('localStorage中没有editPostData');
+        showMessage('未找到文章数据，将创建新文章', 'warning');
+        setDefaultDate();
+        return;
+      }
+
+      console.log('开始解析JSON数据');
+      const postData = JSON.parse(postDataStr);
+      console.log('解析后的文章数据:', postData);
+      
+      // 验证数据完整性
+      const requiredFields = ['title', 'date', 'tags', 'categories', 'body', 'slug'];
+      const missingFields = requiredFields.filter(field => postData[field] === undefined);
+      if (missingFields.length > 0) {
+        console.warn('缺少字段:', missingFields);
+      }
+      
+      // 填充表单数据
+      console.log('开始填充表单数据');
+      
+      const titleInput = document.querySelector('input[name="title"]');
+      const dateInput = document.querySelector('input[name="date"]');
+      const tagsInput = document.querySelector('input[name="tags"]');
+      const categoriesInput = document.querySelector('input[name="categories"]');
+      const bodyTextarea = document.querySelector('#markdownEditor');
+      
+      if (titleInput) {
+        titleInput.value = postData.title || '';
+        console.log('标题已填充:', postData.title);
+      } else {
+        console.error('未找到标题输入框');
+      }
+      
+      if (dateInput) {
+        dateInput.value = postData.date || '';
+        console.log('日期已填充:', postData.date);
+      } else {
+        console.error('未找到日期输入框');
+      }
+      
+      if (tagsInput) {
+        const tagsValue = Array.isArray(postData.tags) ? postData.tags.join(', ') : (postData.tags || '');
+        tagsInput.value = tagsValue;
+        console.log('标签已填充:', tagsValue);
+      } else {
+        console.error('未找到标签输入框');
+      }
+      
+      if (categoriesInput) {
+        categoriesInput.value = postData.categories || '';
+        console.log('分类已填充:', postData.categories);
+      } else {
+        console.error('未找到分类输入框');
+      }
+      
+      if (bodyTextarea) {
+        bodyTextarea.value = postData.body || '';
+        console.log('内容已填充，长度:', (postData.body || '').length);
+      } else {
+        console.error('未找到内容文本框');
+      }
+      
+      // 更新预览
+      console.log('更新预览');
+      updatePreview();
+      
+      // 清除localStorage中的数据
+      localStorage.removeItem('editPostData');
+      console.log('已清除localStorage数据');
+      
+      showMessage('文章数据加载成功！', 'success');
+      
+    } catch (error) {
+      console.error('加载文章数据失败:', error);
+      console.error('错误详情:', error.message);
+      console.error('错误堆栈:', error.stack);
+      
+      // 尝试查看localStorage的原始数据
+      const rawData = localStorage.getItem('editPostData');
+      console.log('出错时的原始数据:', rawData);
+      
+      showMessage('加载文章数据失败：' + error.message, 'error');
+      setDefaultDate();
+    }
+  }
+
+  // 设置默认日期
+  function setDefaultDate() {
+    console.log('设置默认日期');
+    const dateInput = document.querySelector('input[name="date"]');
+    if (dateInput) {
+      const today = new Date();
+      const formattedDate = today.getFullYear() + '-' + 
+        String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+        String(today.getDate()).padStart(2, '0');
+      dateInput.value = formattedDate;
+      console.log('默认日期已设置:', formattedDate);
+    }
+  }
   
   // 转换 Markdown 为 HTML 并更新预览
   function updatePreview() {
@@ -399,6 +534,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 显示消息提示
   function showMessage(message, type = 'info') {
+    console.log('显示消息:', message, type);
+    
     // 创建消息元素
     const messageEl = document.createElement('div');
     messageEl.textContent = message;
@@ -424,6 +561,9 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       case 'error':
         messageEl.style.background = '#f56565';
+        break;
+      case 'warning':
+        messageEl.style.background = '#ed8936';
         break;
       default:
         messageEl.style.background = '#5296d5';
@@ -453,12 +593,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('postForm').onsubmit = async function(e) {
     e.preventDefault();
+    console.log('表单提交开始');
     
     const submitBtn = document.querySelector('.submit-btn');
     const originalText = submitBtn.textContent;
     
+    // 检查是否是编辑模式
+    const urlParams = new URLSearchParams(window.location.search);
+    const isEditMode = urlParams.get('mode') === 'edit';
+    const slug = urlParams.get('slug');
+    
+    console.log('提交参数:', { isEditMode, slug });
+    
     // 显示提交状态
-    submitBtn.textContent = '⏳ 发布中...';
+    submitBtn.textContent = isEditMode ? '⏳ 更新中...' : '⏳ 发布中...';
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.7';
     
@@ -471,9 +619,23 @@ document.addEventListener('DOMContentLoaded', function() {
       body: form.body.value.trim()
     };
     
+    console.log('提交数据:', data);
+    
     try {
-      const res = await fetch('http://localhost:3000/api/posts', {
-        method: 'POST',
+      let url = 'http://localhost:3000/api/posts';
+      let method = 'POST';
+      
+      // 如果是编辑模式，使用PUT方法和包含slug的URL
+      if (isEditMode && slug) {
+        url = `http://localhost:3000/api/posts/${encodeURIComponent(slug)}`;
+        method = 'PUT';
+      }
+      
+      console.log('请求URL:', url);
+      console.log('请求方法:', method);
+      
+      const res = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -481,11 +643,13 @@ document.addEventListener('DOMContentLoaded', function() {
         body: JSON.stringify(data)
       });
       
+      console.log('响应状态:', res.status);
       const result = await res.json();
+      console.log('响应结果:', result);
       
       if (res.ok) {
         // 成功提示
-        submitBtn.textContent = '✅ 发布成功！';
+        submitBtn.textContent = isEditMode ? '✅ 更新成功！' : '✅ 发布成功！';
         submitBtn.style.background = '#48bb78';
         submitBtn.style.opacity = '1';
         
@@ -493,8 +657,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageEl = document.createElement('div');
         messageEl.innerHTML = `
           <div style="text-align: center;">
-            <div style="font-size: 18px; margin-bottom: 10px;">🎉 文章发布成功！</div>
-            <div style="font-size: 14px; opacity: 0.9;">图片预览已修复，正在跳转...</div>
+            <div style="font-size: 18px; margin-bottom: 10px;">${isEditMode ? '🎉 文章更新成功！' : '🎉 文章发布成功！'}</div>
+            <div style="font-size: 14px; opacity: 0.9;">正在跳转...</div>
           </div>
         `;
         messageEl.style.cssText = `
@@ -512,20 +676,31 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.body.appendChild(messageEl);
         
-        // 3秒后跳转到主页
+        // 3秒后跳转
         setTimeout(() => {
-          window.location.href = '/';
+          if (isEditMode && result.path) {
+            // 编辑模式：跳转到文章页面
+            console.log('跳转到文章页面:', '/' + result.path);
+            window.location.href = '/' + result.path;
+          } else {
+            // 新建模式：跳转到主页
+            console.log('跳转到主页');
+            window.location.href = '/';
+          }
         }, 3000);
       } else {
-        throw new Error(result.error || '发布失败');
+        throw new Error(result.error || (isEditMode ? '更新失败' : '发布失败'));
       }
     } catch(err) {
       console.error('提交失败:', err);
       
       // 错误处理
-      submitBtn.textContent = '❌ 发布失败';
+      submitBtn.textContent = isEditMode ? '❌ 更新失败' : '❌ 发布失败';
       submitBtn.style.background = '#f56565';
       submitBtn.style.opacity = '1';
+      
+      // 显示错误消息
+      showMessage(err.message, 'error');
       
       // 恢复按钮状态
       setTimeout(() => {

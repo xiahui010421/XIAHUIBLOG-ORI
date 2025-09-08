@@ -7,23 +7,147 @@
   <% if (page.layout === 'post') { %>
     <link rel="stylesheet" href="/css/post.css">
   <% } %>
+  <!-- 补充左右布局和按钮样式（可合并到 post.css 中，这里暂放 head 方便调试） -->
+  <style>
+    /* 1. 左右布局容器：控制 TOC 和内容在同一行 */
+    .post-container {
+      display: flex;
+      gap: 2rem; /* TOC 和内容之间的间距，可调整 */
+      margin: 1rem 0; /* 上下留白，避免贴边 */
+    }
+
+    /* 2. TOC 样式：固定宽度，超出滚动 */
+    .toc {
+      width: 240px; /* 目录宽度，可根据需求调整 */
+      flex-shrink: 0; /* 防止目录被压缩 */
+      padding: 1rem;
+      background: #f8f9fa; /* 浅色背景区分目录，可选 */
+      border-radius: 4px; /* 圆角优化，可选 */
+      max-height: 80vh; /* 限制目录最大高度，避免过长 */
+      overflow-y: auto; /* 内容超出时滚动 */
+    }
+
+    /* 3. 内容区域：占满剩余宽度 */
+    .content {
+      flex: 1; /* 内容区自动填充剩余空间 */
+      padding: 0 1rem; /* 左右内边距，避免文字贴边 */
+    }
+
+    /* 4. 编辑按钮样式：融入内容区顶部，不额外占区域 */
+    .edit-btn {
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem; /* 按钮与下方内容保持间距 */
+      background: #007bff; /* 蓝色按钮，可调整颜色 */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .edit-btn:hover {
+      background: #0056b3; /*  hover 深色效果 */
+    }
+
+    /* 5. 响应式：小屏幕（手机）自动切换为上下布局 */
+    @media (max-width: 768px) {
+      .post-container {
+        flex-direction: column; /* 垂直排列 */
+      }
+      .toc {
+        width: 100%; /* 目录占满宽度 */
+        max-height: none; /* 取消高度限制 */
+        margin-bottom: 1rem; /* 目录与内容之间留白 */
+      }
+    }
+  </style>
 </head>
-
-
 <body class="<%= page.layout === 'post' ? 'post-page' : '' %>">
-
   <%- partial('_partial/header') %>
-
+  
+  <!-- 主容器：包含 TOC 和内容，用 post-container 实现左右布局 -->
   <main class="container">
-    <aside class="toc">
-      <%- toc(page.content) %>
-    </aside>
-    <section class="content">
-      <%- page.content %>
-    </section>
+    <div class="post-container"> <!-- 新增：左右布局的父容器 -->
+      <!-- 左侧：TOC 目录 -->
+      <aside class="toc">
+        <%- toc(page.content) %>
+      </aside>
+
+      <!-- 右侧：内容区（包含编辑按钮 + 文章内容） -->
+      <section class="content">
+        <!-- 编辑按钮：移到内容区顶部，融入现有结构 -->
+        <button id="editPostBtn" class="edit-btn" title="编辑这篇文章">
+          ✏️ 编辑文章
+        </button>
+        
+        <!-- 文章内容 -->
+        <%- page.content %>
+      </section>
+    </div> <!-- 关闭 post-container -->
   </main>
 
   <%- partial('_partial/footer') %>
+  
+  <!-- 隐藏的文章数据（保持不变） -->
+  <script id="postData" type="application/json">
+    <%
+      // 安全地获取categories
+      let categoryName = '';
+      try {
+        if (page.categories && typeof page.categories === 'object') {
+          if (Array.isArray(page.categories) && page.categories.length > 0) {
+            categoryName = page.categories[0].name || page.categories[0] || '';
+          } else if (page.categories.data && page.categories.data.length > 0) {
+            categoryName = page.categories.data[0].name || page.categories.data[0] || '';
+          } else if (typeof page.categories === 'string') {
+            categoryName = page.categories;
+          }
+        }
+      } catch (e) {
+        categoryName = '';
+      }
+      
+      // 安全地获取tags
+      let tagsArray = [];
+      try {
+        if (page.tags && typeof page.tags === 'object') {
+          if (Array.isArray(page.tags)) {
+            tagsArray = page.tags.map(tag => tag.name || tag).filter(Boolean);
+          } else if (page.tags.data && Array.isArray(page.tags.data)) {
+            tagsArray = page.tags.data.map(tag => tag.name || tag).filter(Boolean);
+          }
+        }
+      } catch (e) {
+        tagsArray = [];
+      }
+      
+      // 安全地获取原始内容
+      let rawContent = '';
+      try {
+        rawContent = page.raw || page.content || '';
+        // 转义特殊字符
+        rawContent = rawContent.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+      } catch (e) {
+        rawContent = '';
+      }
+      
+      // 安全地获取标题
+      let safeTitle = '';
+      try {
+        safeTitle = (page.title || '').replace(/"/g, '\\"');
+      } catch (e) {
+        safeTitle = '';
+      }
+    %>
+    {
+      "title": "<%= safeTitle %>",
+      "date": "<%= page.date ? page.date.format('YYYY-MM-DD') : '' %>",
+      "tags": <%= JSON.stringify(tagsArray) %>,
+      "categories": "<%= categoryName %>",
+      "body": "<%= rawContent %>",
+      "slug": "<%= page.slug || '' %>",
+      "path": "<%= page.path || '' %>"
+    }
+  </script>
 </body>
 <script src="/js/post.js"></script>
 </html>

@@ -1,42 +1,118 @@
 /* ===================== 页面基础样式 ===================== */
 .post-page {
-  background: #f8f9fa;
+  background: #f7fafd; /* 对齐archive的页面背景色 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: #2c3e50;
+  color: #2d3748; /* 统一文字主色，更沉稳 */
   line-height: 1.7;
+  width: 90%; /* 对齐archive的页面宽度控制 */
+  max-width: 1620px; /* 与archive保持一致的最大宽度 */
+  margin: 0 auto; /* 水平居中，统一布局 */
+  padding: 0;
+}
+
+/* ===================== 编辑按钮区域 ===================== */
+.post-actions {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+.edit-btn {
+  background: #5296d5; /* 替换渐变为archive主色，更统一 */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px; /* 统一archive的圆角风格，减少夸张感 */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(82, 150, 213, 0.2); /* 弱化阴影，更精致 */
+  transition: all 0.2s ease; /* 缩短过渡时间，响应更灵敏 */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(82, 150, 213, 0.3); /* hover阴影增强，符合archive质感 */
+  background: #2167b8; /* hover色对应archive的active色 */
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(82, 150, 213, 0.2); /* 恢复原始阴影 */
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+  .post-actions {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    top: auto;
+    transform: none;
+  }
+  
+  .edit-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 6px; /* 小屏幕缩小圆角 */
+  }
 }
 
 /* ===================== 页面布局 ===================== */
 main.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 32px;
   display: flex;
-  flex-direction: row;
-  gap: 36px;
+  gap: 32px; /* 与archive保持一致的间距 */
+  width: 100%;
+  margin: 10px auto;
+  margin-top: 30px; /* 与archive顶部间距一致 */
+  padding: 60px 0 100px; /* 上下内边距对齐archive，优化页面纵向比例 */
   box-sizing: border-box;
+  min-height: 80vh; /* 保证页面最小高度，避免内容过短导致布局失衡 */
 }
 
 /* ===================== 目录区域 TOC ===================== */
 .toc {
-  flex: 0 0 260px;
-  background: #f4f7fb;
-  border-radius: 12px;
-  border: 1px solid #e1e8f0;
-  padding: 20px;
-  font-size: 15px;
+  width: 220px; /* 与archive-sidebar宽度一致 */
+  flex-shrink: 0; /* 固定宽度，不收缩 */
+  background: #f7fafd; /* 对齐archive的侧边栏背景 */
+  border-radius: 8px; /* 统一圆角 */
+  border: 1px solid #e1e8f0; /* 与archive侧边栏边框一致 */
+  padding: 0; /* 取消内边距，统一archive的标题+内容结构 */
+  font-size: 0.9em; /* 缩小字体，更精致 */
   line-height: 1.6;
   position: sticky;
   top: 80px;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  height: fit-content; /* 适应内容高度 */
+  max-height: calc(100vh - 100px); /* 与archive保持一致的最大高度 */
+  overflow: hidden; /* 隐藏溢出，配合内部滚动 */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02); /* 弱化阴影，符合archive风格 */
+  transition: all 0.2s ease; /* 缩短过渡时间 */
+}
+
+/* 目录标题 - 对齐archive的group-title结构 */
+.toc-group-title {
+  padding: 16px 24px;
+  margin: 0;
+  font-size: 1.1em;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  background: #fff; /* 标题背景白色，突出层级 */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid #e1e8f0; /* 标题下边框，分隔内容 */
 }
 
 .toc:hover {
-  box-shadow: 0 12px 20px rgba(52, 152, 219, 0.3);
-  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(82, 150, 213, 0.15); /* 弱化hover阴影，更自然 */
+  transform: translateY(-2px); /* 减小上浮距离，更克制 */
 }
 
 /* 去除目录编号 */
@@ -53,88 +129,121 @@ main.container {
   display: none !important;
 }
 
+/* 目录内容区域 - 对齐archive的submenu */
+.toc-submenu {
+  padding: 8px 0;
+  max-height: 280px; /* 限制高度，可滚动 */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 自定义滚动条 - 对齐archive */
+.toc-submenu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-submenu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.toc-submenu::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.toc-submenu::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
 .toc li {
-  margin-bottom: 8px;
+  margin-bottom: 0; /* 取消默认间距，用padding控制 */
 }
 
 .toc a {
   text-decoration: none;
-  color: #2563eb;
-  padding: 4px 6px;
+  color: #5296d5; /* 目录链接色，与archive一致 */
+  padding: 8px 24px 8px 36px; /* 对齐archive的submenu-item内边距 */
   display: block;
-  border-radius: 6px;
+  border-radius: 0; /* 取消圆角，统一archive的全屏hover效果 */
   transition: all 0.2s ease;
+  font-size: 0.95em;
+  line-height: 1.3;
+  word-break: break-all;
 }
 
 .toc a:hover,
 .toc .active {
-  background-color: #e7f1ff;
+  background: #e7f2fa; /* hover/active背景，与archive一致 */
   font-weight: 500;
-  color: #1e3a8a;
+  color: #2167b8; /* 激活色，对应archive的active色 */
 }
 
 /* ===================== 内容正文区域 ===================== */
 .content {
   flex: 1;
+  min-width: 0; /* 避免内容溢出 */
   background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  font-size: 17px;
+  padding: 32px; /* 调整内边距，更适中 */
+  border-radius: 8px; /* 统一圆角 */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02); /* 弱化阴影，符合archive风格 */
+  font-size: 16px; /* 缩小字体，提升阅读体验 */
   line-height: 1.8;
   overflow-wrap: break-word;
   word-break: break-word;
-  margin-top: 30px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  margin-top: 0; /* 取消顶部间距，由main容器统一控制 */
+  transition: all 0.2s ease;
 }
 
 .content:hover {
-  box-shadow: 0 12px 20px rgba(52, 152, 219, 0.3);
-  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(82, 150, 213, 0.15); /* 弱化hover阴影，更自然 */
+  transform: translateY(-2px); /* 减小上浮距离，更克制 */
 }
 
 /* ===================== 标题样式 ===================== */
 .content h1 {
-  font-size: 2rem;
+  font-size: 1.8rem; /* 缩小标题字号，更协调 */
   margin-bottom: 1.5rem;
-  color: #1a3e72;
-  border-bottom: 2px solid #ddd;
+  color: #2d3748; /* 标题色与archive一致 */
+  border-bottom: 1px solid #e1e8f0; /* 边框色对齐archive */
   padding-bottom: 0.5rem;
-  scroll-margin-top: 80px; /* 添加滚动偏移量，值根据 header 高度调整 */
+  scroll-margin-top: 80px;
 }
 
 .content h2 {
-  font-size: 1.6rem;
-  color: #1e40af;
-  border-left: 4px solid #5296d5;
-  padding-left: 0.6rem;
+  font-size: 1.4rem; /* 缩小字号 */
+  color: #2d3748; /* 标题色统一为深灰，更沉稳 */
+  border-left: 4px solid #5296d5; /* 左边框色与archive主色一致 */
+  padding-left: 0.8rem; /* 增加左内边距，更舒适 */
   margin-top: 2rem;
   margin-bottom: 1rem;
-  scroll-margin-top: 80px; /* 添加滚动偏移量，值根据 header 高度调整 */
+  scroll-margin-top: 80px;
 }
 
 /* ===================== 正文细节样式 ===================== */
 .content p {
   margin-bottom: 1.2rem;
+  color: #4a5568; /* 正文色调整为低饱和灰，更易读 */
 }
 
 .content pre {
-  background: #f4f4f4;
-  padding: 1rem;
-  border-radius: 6px;
+  background: #f7fafd; /* 代码块背景对齐页面背景 */
+  padding: 1.2rem;
+  border-radius: 6px; /* 统一圆角 */
   overflow-x: auto;
   font-family: Menlo, Consolas, monospace;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   margin: 1.5rem 0;
+  border: 1px solid #e1e8f0; /* 增加边框，提升层次 */
 }
 
 .content blockquote {
-  background: #f0f8ff;
-  border-left: 4px solid #87cefa;
+  background: #e7f2fa; /* 引用背景与目录hover色一致 */
+  border-left: 4px solid #5296d5; /* 引用边框色与主色一致 */
   padding: 12px 16px;
-  color: #555;
-  border-radius: 6px;
+  color: #2d3748; /* 引用文字色加深，提升可读性 */
+  border-radius: 0 6px 6px 0; /* 仅右圆角，更精致 */
   margin: 1.5rem 0;
 }
 
@@ -142,16 +251,25 @@ main.container {
 @media screen and (max-width: 900px) {
   main.container {
     flex-direction: column;
-    padding: 24px 16px;
+    gap: 20px; /* 缩小间距 */
+    padding: 40px 0 80px; /* 小屏幕调整上下内边距 */
   }
-
+  
   .toc {
     position: static;
     max-height: none;
     width: 100%;
   }
-
+  
   .content {
-    padding: 24px;
+    padding: 20px; /* 小屏幕减少内边距 */
+  }
+
+  .content h1 {
+    font-size: 1.5rem;
+  }
+
+  .content h2 {
+    font-size: 1.2rem;
   }
 }

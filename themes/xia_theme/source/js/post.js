@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 使用Intersection Observer来检测标题元素的可见性
   const observerOptions = {
-    root: null, // 使用视口作为根元素
-    rootMargin: '0px 0px -80% 0px', // 当元素进入视口上部20%时触发
-    threshold: 0.1 // 当元素至少有10%可见时触发
+    root: null,
+    rootMargin: '0px 0px -80% 0px',
+    threshold: 0.1
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -67,5 +67,48 @@ document.addEventListener('DOMContentLoaded', function() {
   // 初始化高亮第一个目录项
   if (tocLinks.length > 0 && headers.length > 0) {
     tocLinks[0].classList.add('active');
+  }
+
+  // HTML实体解码函数
+  function decodeHtmlEntities(text) {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  }
+
+  // ===================== 编辑功能 =====================
+  const editBtn = document.getElementById('editPostBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', function() {
+      // 获取文章数据
+      const postDataElement = document.getElementById('postData');
+      
+      if (!postDataElement) {
+        alert('无法获取文章数据');
+        return;
+      }
+
+      try {
+        // 获取原始JSON文本并解码HTML实体
+        const rawJsonText = postDataElement.textContent;
+        const decodedJsonText = decodeHtmlEntities(rawJsonText);
+        
+        console.log('原始JSON:', rawJsonText);
+        console.log('解码后JSON:', decodedJsonText);
+        
+        const postData = JSON.parse(decodedJsonText);
+        
+        // 将文章数据保存到localStorage
+        localStorage.setItem('editPostData', JSON.stringify(postData));
+        
+        // 跳转到编辑器页面
+        const slug = postData.slug || 'unknown';
+        window.location.href = '/editor?mode=edit&slug=' + encodeURIComponent(slug);
+        
+      } catch (error) {
+        console.error('解析文章数据失败:', error);
+        alert('获取文章数据失败，请刷新页面后重试');
+      }
+    });
   }
 });
